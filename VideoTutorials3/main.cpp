@@ -1,65 +1,63 @@
 #include <iostream>
 #include <string>
+#include "Shop.h"
+#include "Player.h"
 
 using namespace std;
 
-// Global Constants
-const int numItems = 6;
-const string shopItemNames[numItems] = {"Boots", "Swords", "Helmets", "Kittens", "Poleaxes", "Leggings"};
-
-void printInventory(const int playerInventory[numItems]);
-void printShop();
-bool buyItems(int playerInventory[numItems]);
+void initShops(list<Shop> &shops);
+void initPlayer(Player &player);
+void pickShop(list<Shop> &shops);
 
 int main() {
-	// Variables
-	bool isDone = false;
-	int playerInventory[numItems] = {0, 0, 0, 1, 0, 0};
+	list<Shop> shops;
+	Player player;
 
-	cout << "*** Welcome to the item shop! ***" << endl;
+	// Initialize
+	initPlayer(player);
+	initShops(shops);
+
+	// Tells us when the game is over
+	bool isDone = false;
 
 	while(!isDone) {
-		printShop();
-		printInventory(playerInventory);
-		isDone = buyItems(playerInventory);
+		cout << "Which shop would you like to enter? ";
 	}
 
 	system("PAUSE");
 	return 0;
 }
 
-void printInventory(const int playerInventory[numItems]) {
-	cout << "Your inventory is:\n\n";
-	for(int i = 0; i < numItems; i++) {
-		if(playerInventory[i] > 0) {
-			cout << playerInventory[i] << "x " << shopItemNames[i] << endl;
-		}
-	}
+void initShops(list<Shop> &shops) {
+	shops.push_back(Shop("Bill's Leather Shop", 500));
+	shops.back().addItem(Item("Leather Boots", 50));
+	shops.back().addItem(Item("Leather Hat", 50));
+	shops.back().addItem(Item("Leather Gloves", 50));
+	shops.back().addItem(Item("Leather Gauntlets", 50));
+	shops.back().addItem(Item("Leather Chestpiece", 100));
+
+	shops.push_back(Shop("The Blacksmith", 1500));
+	shops.back().addItem(Item("Iron Boots", 100));
+	shops.back().addItem(Item("Iron Hat", 100));
+	shops.back().addItem(Item("Iron Gloves", 100));
+	shops.back().addItem(Item("Iron Gauntlets", 100));
+	shops.back().addItem(Item("Iron Chestpiece", 200));
+	shops.back().addItem(Item("Iron Sword", 150));
+	shops.back().addItem(Item("Iron Shield", 150));
+
+	shops.push_back(Shop("Beverly's Fruity Fruit Shop", 1500));
+	shops.back().addItem(Item("Grapes", 5));
+	shops.back().addItem(Item("Apple", 5));
+	shops.back().addItem(Item("Orange", 10));
+	shops.back().addItem(Item("Watermelon", 10));
+	shops.back().addItem(Item("Tomato", 3));
 }
 
-void printShop() {
-	for(int i = 0; i < numItems; i++) {
-		cout << i + 1 << ". " << shopItemNames[i] << endl;
-	}
+void initPlayer(Player &player) {
+	cout << "Enter your name: " << endl;
+	string name;
+	cin >> name;
+	player.init(name, 100);
 
-	cout << "************\n\n";
-}
-
-bool buyItems(int playerInventory[numItems]) {
-	int input;
-
-	cout << "What would you like to buy? Enter (1 - " << numItems << "): ";
-	cin >> input;
-
-	if(input == -1) {
-		return true;	// Program is over
-	}
-
-	if(input < 0 || input > numItems) {
-		cout << "Invalid input!\n";
-		return false; // Keep going
-	}
-
-	playerInventory[input - 1]++;
-	return false;
+	player.addItem(Item("Bronze Sword", 5));
 }
