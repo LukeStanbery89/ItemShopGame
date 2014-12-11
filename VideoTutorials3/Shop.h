@@ -13,6 +13,9 @@ public:
 	bool purchaseItem(string name, Item &newItem);
 	void addItem(Item newItem);
 
+	// Getters
+	string getName() { return _name; }
+
 private:
 	string _name;
 	list<Item> _items;

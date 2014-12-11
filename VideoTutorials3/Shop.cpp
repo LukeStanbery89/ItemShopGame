@@ -10,7 +10,7 @@ void Shop::printShop() {
 	cout << "*** Welcome to " << _name << " ***\n\n";
 	list<Item>::iterator lit;
 
-	int i = 0;
+	int i = 1;
 
 	// Print each item to the screen
 	for(lit = _items.begin(); lit != _items.end(); lit++) {

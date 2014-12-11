@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <iostream>
 
 Player::Player() {
 }
@@ -8,17 +9,35 @@ void Player::init(string name, int money) {
 	_money = money;
 }
 
-void Player::removeItem(string name) {
+void Player::printInventory() {
+	cout << "\n*** " << _name << "'s inventory ***\n\n";
+	list<Item>::iterator lit;
+
+	int i = 1;
+
+	// Print each item to the screen
+	for(lit = _items.begin(); lit != _items.end(); lit++) {
+		cout << i << ". " << (*lit).getName() << " x " << (*lit).getCount() << endl;
+		i++;
+	}
+}
+
+bool Player::removeItem(string name, Item &newItem) {
 	list<Item>::iterator lit;
 
 	// Iterate through all player items
 	for(lit = _items.begin(); lit != _items.end(); lit++) {
 		if((*lit).getName() == name) {
 			// If shop has the item, erase it from the list
-			_items.erase(lit);
-			return;
+			newItem = (*lit);
+			(*lit).removeOne();
+			if((*lit).getCount() == 0) {
+				_items.erase(lit);
+			}
+			return true;
 		}
 	}
+	return false;
 }
 
 void Player::addItem(Item newItem) {

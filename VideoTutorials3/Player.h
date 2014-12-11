@@ -11,16 +11,14 @@ public:
 
 	void init(string name, int money);
 
-	void removeItem(string name);
+	void printInventory();
+
+	bool removeItem(string name, Item &newItem);
 	void addItem(Item newItem);
 
 	// Getters
-	int getMoney() {
-		return _money;
-	}
-	void subtractMoney(int amount) {
-		_money += amount;
-	}
+	int getMoney() { return _money; }
+	void subtractMoney(int amount) { _money += amount; }
 private:
 	string _name;
 	list<Item> _items;

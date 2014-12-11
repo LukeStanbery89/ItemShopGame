@@ -8,10 +8,13 @@ using namespace std;
 void initShops(list<Shop> &shops);
 void initPlayer(Player &player);
 void pickShop(list<Shop> &shops);
+void enterShop(Player &player, Shop &shop);
 
 int main() {
 	list<Shop> shops;
+	list<Shop>::iterator lit;
 	Player player;
+	string shopName;
 
 	// Initialize
 	initPlayer(player);
@@ -21,7 +24,32 @@ int main() {
 	bool isDone = false;
 
 	while(!isDone) {
-		cout << "Which shop would you like to enter? ";
+		cout << "Shops:\n";
+		int i = 1;
+		for(lit = shops.begin(); lit != shops.end(); lit++) {
+			cout << i++ << ". " << (*lit).getName() << endl;
+		}
+		cout << "\nWhich shop would you like to enter? ";
+
+		//cin.clear();
+		//cin.ignore(64, '\n');
+		getline(cin, shopName);
+
+		//cout << "You inputted: " << shopName << endl;
+		cout << endl;
+
+		bool validShop = false;
+
+		for(lit = shops.begin(); lit != shops.end(); lit++) {
+			if((*lit).getName() == shopName) {
+				enterShop(player, (*lit));
+				validShop = true;
+			}
+		}
+
+		if(!validShop) {
+			cout << "Invalid Shop!\n\n";
+		}
 	}
 
 	system("PAUSE");
@@ -54,10 +82,54 @@ void initShops(list<Shop> &shops) {
 }
 
 void initPlayer(Player &player) {
-	cout << "Enter your name: " << endl;
+	cout << "Enter your name: ";
 	string name;
-	cin >> name;
+	getline(cin, name);
 	player.init(name, 100);
 
 	player.addItem(Item("Bronze Sword", 5));
+}
+
+void enterShop(Player &player, Shop &shop) {
+	bool isDone = false;
+	char input;
+	string itemName;
+	Item newItem("NOITEM", 0);
+
+	while(!isDone) {
+		shop.printShop();
+		player.printInventory();
+
+		cout << "\nWould you like to buy or sell? (B/S): ";
+		cin >> input;
+		cin.ignore();
+		cin.clear();
+
+		if(input == 'Q' || input == 'q') {
+			return;
+		}
+
+		if(input == 'B' || input == 'b') { // buy
+			cout << "Enter the item you wish to buy: ";
+			getline(cin, itemName);
+
+			if(shop.purchaseItem(itemName, newItem) == true) {
+				player.addItem(newItem);
+			} else {
+				cout << "That is an invalid item!" << endl;
+				system("PAUSE");
+			}
+
+		} else { //sell
+			cout << "Enter the item you wish to sell: ";
+			getline(cin, itemName);
+
+			if(player.removeItem(itemName, newItem)) {
+				shop.addItem(newItem);
+			} else {
+				cout << "That is an invalid item!" << endl;
+				system("PAUSE");
+			}
+		}
+	}
 }
