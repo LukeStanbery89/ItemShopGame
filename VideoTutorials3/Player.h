@@ -12,9 +12,11 @@ public:
 	void init(string name, int money);
 
 	void printInventory();
-
+	bool canAffordItem(string name, int money);
 	bool removeItem(string name, Item &newItem);
 	void addItem(Item newItem);
+
+	void addMoney(int money) { _money += money; }
 
 	// Getters
 	int getMoney() { return _money; }

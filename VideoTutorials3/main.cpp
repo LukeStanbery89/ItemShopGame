@@ -113,10 +113,18 @@ void enterShop(Player &player, Shop &shop) {
 			cout << "Enter the item you wish to buy: ";
 			getline(cin, itemName);
 
-			if(shop.purchaseItem(itemName, newItem) == true) {
-				player.addItem(newItem);
+			if(shop.canAffordItem(itemName, player.getMoney())) {
+
+				if(shop.purchaseItem(itemName, newItem) == true) {
+					player.addMoney(-newItem.getValue());
+					player.addItem(newItem);
+					shop.addMoney(newItem.getValue());
+				} else {
+					cout << "That is an invalid item!" << endl;
+					system("PAUSE");
+				}
 			} else {
-				cout << "That is an invalid item!" << endl;
+				cout << "You don't have enough money!\n";
 				system("PAUSE");
 			}
 
@@ -124,10 +132,18 @@ void enterShop(Player &player, Shop &shop) {
 			cout << "Enter the item you wish to sell: ";
 			getline(cin, itemName);
 
-			if(player.removeItem(itemName, newItem)) {
-				shop.addItem(newItem);
+			if(player.canAffordItem(itemName, shop.getMoney())) {
+
+				if(player.removeItem(itemName, newItem)) {
+					shop.addMoney(-newItem.getValue());
+					shop.addItem(newItem);
+					player.addMoney(newItem.getValue());
+				} else {
+					cout << "That is an invalid item!" << endl;
+					system("PAUSE");
+				}
 			} else {
-				cout << "That is an invalid item!" << endl;
+				cout << "The shop doesn't have enough money!\n";
 				system("PAUSE");
 			}
 		}

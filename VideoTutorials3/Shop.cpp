@@ -8,15 +8,32 @@ Shop::Shop(string name, int money) {
 
 void Shop::printShop() {
 	cout << "*** Welcome to " << _name << " ***\n\n";
+	cout << "Money: " << _money << " GP\n";
 	list<Item>::iterator lit;
 
 	int i = 1;
 
 	// Print each item to the screen
 	for(lit = _items.begin(); lit != _items.end(); lit++) {
-		cout << i << ". " << (*lit).getName() << " x " << (*lit).getCount() << endl;
+		cout << i << ". " << (*lit).getName() << " x " << (*lit).getCount() << " - " << (*lit).getValue() << " GP" << endl;
 		i++;
 	}
+}
+
+bool Shop::canAffordItem(string name, int money) {
+	list<Item>::iterator lit;
+
+	// Iterate through all shop items
+	for(lit = _items.begin(); lit != _items.end(); lit++) {
+		if((*lit).getName() == name) {
+			if((*lit).getValue() <= money) {
+				return true;
+			} else {
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 bool Shop::purchaseItem(string name, Item &newItem) {
